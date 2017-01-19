@@ -1,1 +1,3 @@
 http://websystique.com/springmvc/spring-4-mvc-jms-activemq-annotation-based-example/
+
+http://briansjavablog.blogspot.in/2012/09/spring-jms-tutorial-with-activemq.html
