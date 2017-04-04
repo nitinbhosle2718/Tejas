@@ -1,0 +1,51 @@
+Sub test()
+
+Dim eRow As Long
+Dim ele As Object
+
+Set sht = Sheets("Sheet1")
+RowCount = 1
+sht.Range("A" & RowCount) = "S-Acnt"
+sht.Range("B" & RowCount) = "Lan Id"
+
+eRow = Sheet1.Cells(Rows.Count, 1).End(xlUp).Offset(1, 0).Row
+
+Set objIE = CreateObject("InternetExplorer.Application")
+
+SAcc = InputBox("Enter S account")
+
+With objIE
+.Visible = True
+.navigate "https://ams/main/WorkAccounts/WorkAccounts/ApprovedWorkAccounts/tabid/294/Default.aspx"
+
+
+
+Set Work_Account = .document.getElementsByName("dnn_ctr837_ViewWorkAccounts_TXBQueryGenericId")
+Work_Account.Item(0).Value = SAcc
+
+.document.getElementById("dnn_ctr837_ViewWorkAccounts_BtnSearch").Click
+
+Do While .Busy Or _
+.readyState <> 4
+DoEvents
+Loop
+
+For Each ele In .document.all
+
+Select Case ele.classname
+Case "Result"
+RowCount = RowCount + 1
+Case "text"
+sht.Range("A" & RowCount) = ele.innertext
+Case "LEEACommonGridHeader"
+sht.Range("B" & RowCount) = ele.innertext
+
+End Select
+Next ele
+
+End With
+
+
+Set objIE = Nothing
+
+End Sub
